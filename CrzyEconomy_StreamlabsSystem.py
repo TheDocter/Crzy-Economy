@@ -45,6 +45,7 @@ class Settings:
             self.OnlyLive = False
             # Banking Commands
             self.EnableBanking = True
+            self.BankName = 'TheCrzyDoctor\'s Bank'
             self.cmdCreateChecking = '!createchecking'
             self.cmdDepositChecking = '!depositchecking'
             self.cmdCreateSavings = '!createsavings'
@@ -53,6 +54,9 @@ class Settings:
             self.SavingsInterestAdd = 30
             self.cmdWireTransfer = '!wiretransfer'
             self.WireTransferCost = 25
+            self.BankingPermissions = 'Everyone'
+            self.BankingPermissions = 'Stream Chat'
+            self.BankingPermissionInfo = ''
             # Permissions/Usage
             self.Usage = 'Stream Chat'
             self.Permission = 'Everyone'
@@ -94,6 +98,8 @@ def ReloadSettings(jsonData):
 def Init():
     """ Intialize Data (only called on load) """
     global CESettings, Checking, Savings, WireTransfer
+
+    # Create global vars to use banking
     CESettings = Settings(settingsFile)
     Checking = bank.Checking()
     Savings = bank.Savings()
@@ -120,6 +126,7 @@ def Execute(data):
 def Tick():
     """Required tick function"""
     pass
+
 
 # ---------------------------------------
 # 	[Optional] Usage functions
