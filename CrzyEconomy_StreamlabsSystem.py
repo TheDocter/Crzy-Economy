@@ -34,6 +34,9 @@ Version = "0.0.1"
 
 settingsFile = os.path.join(os.path.dirname(__file__), "settings.json")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CHECKING_DIR = BASE_DIR + '/Banking/checkingaccounts'
+SAVINGS_DIR = BASE_DIR + '/Banking/savingaccounts'
+WIRE_TRANSFER_DIR = BASE_DIR + '/Banking/wiretransfer'
 
 
 class Settings:
@@ -46,16 +49,30 @@ class Settings:
             # Banking Commands
             self.EnableBanking = True
             self.BankName = 'TheCrzyDoctor\'s Bank'
+            self.cmdBank = '!bank'
             self.cmdCreateChecking = '!createchecking'
             self.cmdDepositChecking = '!depositchecking'
             self.cmdCreateSavings = '!createsavings'
             self.cmdDepositSavings = '!depositsavings'
+            self.cmdWireTransfer = '!wiretransfer'
+            # Banking Variables
             self.SavingsInterestPercent = 1.5
             self.SavingsInterestAdd = 30
-            self.cmdWireTransfer = '!wiretransfer'
             self.WireTransferCost = 25
+            # Banking Responses
+            self.CheckingAccountCreated = '{0}, you have created a new checking account at {1}.'
+            self.CheckingAccountAlreadyCreated = '{0}, you already created a checking account.'
+            self.NoCheckingAccount = '{0}, you do not have a checking account at {1}.'
+            self.CheckingAccountDeposit = '{0}, you just deposited {1} {2} at {3}.'
+            self.SavingAccountCreated = '{0}, you have created a new savings account at {1}.'
+            self.SavingsAccountAlreadyCreated = '{0}, you already created a savings account.'
+            self.NoSavingsAccount = '{0}, you do not have a savings account at {1}.'
+            self.SavingsDeposit = '{0}, you just deposted {1} {2} at {2}.'
+            self.WireTransferSent = '{0}, you just sent {1} {2}'
+            self.WireTransferFailed = '{0}, there was a problem with sending {1} {2}'
+            # Banking Permissions
+            self.BankingUsage = 'Stream Chat'
             self.BankingPermissions = 'Everyone'
-            self.BankingPermissions = 'Stream Chat'
             self.BankingPermissionInfo = ''
             # Permissions/Usage
             self.Usage = 'Stream Chat'
@@ -101,26 +118,117 @@ def Init():
 
     # Create global vars to use banking
     CESettings = Settings(settingsFile)
-    Checking = bank.Checking()
-    Savings = bank.Savings()
-    WireTransfer = bank.WireTransfer()
+    Checking = bank.Checking(CHECKING_DIR)
+    Savings = bank.Savings(SAVINGS_DIR)
+    WireTransfer = bank.WireTransfer(WIRE_TRANSFER_DIR)
 
     # Check to see if the folders are created.
-    if not os.path.exists(BASE_DIR + '/Banking/checkingaccounts'):
-        os.mkdir(BASE_DIR + '/Banking/checkingaccounts')
+    if not os.path.exists(CHECKING_DIR):
+        os.mkdir(CHECKING_DIR)
 
-    if not os.path.exists(BASE_DIR + '/Banking/savingsaccount'):
-        os.mkdir(BASE_DIR + '/Banking/savingaccounts')
+    if not os.path.exists(SAVINGS_DIR):
+        os.mkdir(SAVINGS_DIR)
 
-    if not os.path.exists(BASE_DIR + '/Banking/wiretransfers'):
-        os.mkdir(BASE_DIR + '/Banking/wiretransfer')
+    if not os.path.exists(WIRE_TRANSFER_DIR):
+        os.mkdir(WIRE_TRANSFER_DIR)
 
     return
 
 
 def Execute(data):
     """ Executes data and processes the message. """
-    pass
+    if data.IsChatMessage() and not CESettings.OnlyLive or Parent.IsLive():
+        # find out what command they are using.
+        if data.GetParam(0).lower() == CESettings.cmdCreateChecking.lower():
+            # check to see if the user has banking permissions
+            if not has_banking_permission(data):
+                return
+
+            # check if the user has an account
+            if Checking.has_account(data.UserName):
+                SendResp(data, CESettings.BankingUsage, CESettings.CheckingAccountAlreadyCreated.format(data.UserName))
+                return
+
+            # Create the account.
+            Checking.create_account(data.UserName)
+            SendResp(data, CESettings.BankingUsage,
+                     CESettings.CheckingAccountCreated.format(data.UserName, CESettings.BankName))
+            return
+
+        if data.GetParam(0).lower() == CESettings.cmdDepositChecking.lower() and data.GetParamCount() == 2:
+            # check to see if the user has banking permissions
+            if not has_banking_permission(data):
+                return
+
+            # check if the user has an account
+            if not Checking.has_account(data.UserName):
+                SendResp(data, CESettings.BankingUsage,
+                         CESettings.NoCheckingAccount.format(data.UserName, CESettings.BankName))
+                return
+
+            # make sure the user has enough points
+            if Parent.GetPoints(data.User) > data.GetParam(1):
+                SendResp(data, CESettings.BankingUsage, CESettings.NoCurrency.format(data.UserName))
+                return
+
+            # deposit into checking.
+            Checking.deposit(data.UserName, data.GetParam(1))
+            SendResp(data, CESettings.BankingUsage,
+                     CESettings.CheckingAccountDeposit.format(data.UserName, data.GetParam(1),
+                                                              Parent.GetCurrencyName(),
+                                                              CESettings.BankName))
+            return
+
+        if data.GetParam(0).lower() == CESettings.cmdCreateSavings.lower():
+            # check to see if the user has banking permissions
+            if not has_banking_permission(data):
+                return
+
+            if Savings.has_account(data.User()):
+                SendResp(data, CESettings.BankingUsage,
+                         CESettings.SavingsAccountAlreadyCreated.format(data.UserName, CESettings.BankName))
+                return
+
+            Savings.create_account(data.User())
+            SendResp(data, CESettings.BankingUsage, CESettings.SavingAccountCreated.format(data.UserName, CESettings.BankName))
+
+            return
+
+        if data.GetParam(0).lower() == CESettings.cmdDepositSavings.lower() and data.GetParamCount() == 2:
+            # check to see if the user has banking permissions
+            if not has_banking_permission(data):
+                return
+
+            if not Savings.has_account(data.User()):
+                SendResp(data, CESettings.BankingUsage,
+                         CESettings.NoSavingsAccount.format(data.UserName, CESettings.BankName))
+                return
+
+            # make sure the user has enough points
+            if Parent.GetPoints(data.User) < data.GetParam(1):
+                message = CESettings.NoCurrency.format(data.UserName)
+                SendResp(data, CESettings.BankingUsage, message)
+                return
+
+            SendResp(data, CESettings.BankingUsage,
+                     CESettings.SavingsDeposit.format(data.UserName, data.GetParam(1),
+                                                      Parent.GetCurrencyName(),
+                                                      CESettings.BankName))
+            return
+
+        if data.GetParam(0).lower() == CESettings.cmdWireTransfer.lower()and data.GetParamCount() == 3:
+            # check to see if the user has banking permissions
+            if not has_banking_permission(data):
+                return
+
+            # make sure the user has enough points
+            points = int(data.GetParam(1)) + CESettings.WireTransferCost
+            if Parent.GetPoints(data.User) < points:
+                message = CESettings.NoCurrency.format(data.UserName)
+                SendResp(data, CESettings.BankingUsage, message)
+                return
+            # TODO: Create Wire Transfer Functions.
+            return
 
 
 def Tick():
@@ -182,9 +290,18 @@ def openreadme():
     return
 
 
-def haspermission(data):
+def has_permission(data):
     """ CHecks to see if the user hs the correct permission.  Based on Castorr91's Gamble"""
     if not Parent.HasPermission(data.User, CESettings.Permission, CESettings.PermissionInfo):
+        message = CESettings.PermissionResp.format(data.UserName, CESettings.Permission, CESettings.PermissionInfo)
+        SendResp(data, CESettings.Usage, message)
+        return False
+    return True
+
+
+def has_banking_permission(data):
+    """ CHecks to see if the user hs the correct permission.  Based on Castorr91's Gamble"""
+    if not Parent.HasPermission(data.User, CESettings.BankingPermissions, CESettings.PermissionInfo):
         message = CESettings.PermissionResp.format(data.UserName, CESettings.Permission, CESettings.PermissionInfo)
         SendResp(data, CESettings.Usage, message)
         return False
@@ -235,7 +352,7 @@ def is_on_cooldown(data):
     return False
 
 
-def addcooldown(data):
+def add_cooldown(data):
     """Create Cooldowns Based on Castorr91's Gamble"""
     if Parent.HasPermission(data.User, "Caster", "") and CESettings.CasterCD:
         Parent.AddCooldown(ScriptName, CESettings.Command, CESettings.CoolDown)
