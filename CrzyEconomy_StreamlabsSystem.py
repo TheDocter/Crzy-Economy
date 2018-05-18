@@ -49,7 +49,7 @@ class Settings:
             # Banking Commands
             self.EnableBanking = True
             self.BankName = 'TheCrzyDoctor\'s Bank'
-            self.cmdBank = '!bank'
+            self.cmdBankInfo = '!bankinfo'
             self.cmdCreateChecking = '!createchecking'
             self.cmdDepositChecking = '!depositchecking'
             self.cmdCreateSavings = '!createsavings'
@@ -205,9 +205,8 @@ def Execute(data):
                 return
 
             # make sure the user has enough points
-            if Parent.GetPoints(data.User) < data.GetParam(1):
-                message = CESettings.NoCurrency.format(data.UserName)
-                SendResp(data, CESettings.BankingUsage, message)
+            if Parent.GetPoints(data.User) > data.GetParam(1):
+                SendResp(data, CESettings.BankingUsage, CESettings.NoCurrency.format(data.UserName))
                 return
 
             SendResp(data, CESettings.BankingUsage,
@@ -224,8 +223,7 @@ def Execute(data):
             # make sure the user has enough points
             points = int(data.GetParam(1)) + CESettings.WireTransferCost
             if Parent.GetPoints(data.User) < points:
-                message = CESettings.NoCurrency.format(data.UserName)
-                SendResp(data, CESettings.BankingUsage, message)
+                SendResp(data, CESettings.BankingUsage, CESettings.NoCurrency.format(data.UserName))
                 return
             # TODO: Create Wire Transfer Functions.
             return
