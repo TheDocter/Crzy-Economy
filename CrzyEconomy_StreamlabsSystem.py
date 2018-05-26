@@ -52,24 +52,29 @@ class Settings:
             self.cmdBankInfo = '!bankinfo'
             self.cmdCreateChecking = '!createchecking'
             self.cmdDepositChecking = '!depositchecking'
+            self.cmdWithdrawChecking = '!withdrawchecking'
             self.cmdCreateSavings = '!createsavings'
             self.cmdDepositSavings = '!depositsavings'
+            self.cmdWithdrawSavings = '!withdrawsavings'
+            self.cmdCheckAccounts = '!checkaccounts'
             self.cmdWireTransfer = '!wiretransfer'
             # Banking Variables
-            self.SavingsInterestPercent = 1.5
-            self.SavingsInterestAdd = 30
+            self.SavingsInterestPercent = 1
+            self.SavingsInterestAdd = 2592000
             self.WireTransferCost = 25
             # Banking Responses
             self.CheckingAccountCreated = '{0}, you have created a new checking account at {1}.'
             self.CheckingAccountAlreadyCreated = '{0}, you already created a checking account.'
             self.NoCheckingAccount = '{0}, you do not have a checking account at {1}.'
             self.CheckingAccountDeposit = '{0}, you just deposited {1} {2} at {3}.'
+            self.CheckingWithdrawal = '{0}, you just withdrew {1} from your checking account at {2}.'
             self.SavingAccountCreated = '{0}, you have created a new savings account at {1}.'
             self.SavingsAccountAlreadyCreated = '{0}, you already created a savings account.'
             self.NoSavingsAccount = '{0}, you do not have a savings account at {1}.'
-            self.SavingsDeposit = '{0}, you just deposted {1} {2} at {2}.'
-            self.WireTransferSent = '{0}, you just sent {1} {2}'
-            self.WireTransferFailed = '{0}, there was a problem with sending {1} {2}'
+            self.SavingsDeposit = '{0}, you just deposited {1} {2} at {2}.'
+            self.SavingsWithdrawal = '{0}, you just withdrew {1} from your savings accounts at {2}.'
+            self.WireTransferSent = '{0}, you just sent {1} {2}.'
+            self.WireTransferFailed = '{0}, there was a problem with sending {1} {2}.'
             # Banking Permissions
             self.BankingUsage = 'Stream Chat'
             self.BankingPermissions = 'Everyone'
@@ -179,6 +184,30 @@ def Execute(data):
                                                               CESettings.BankName))
             return
 
+        if data.GetParam(0).lower() == CESettings.cmdWithdrawChecking.lower() and data.GetParamCount() == 2:
+            # check to see if the user has banking permissions
+            if not has_banking_permission(data):
+                return
+
+            # check if the user has an account
+            if not Checking.has_account(data.UserName):
+                SendResp(data, CESettings.BankingUsage,
+                         CESettings.NoCheckingAccount.format(data.UserName, CESettings.BankName))
+                return
+
+            # make sure the user has enough points
+            if Parent.GetPoints(data.User) > data.GetParam(1):
+                SendResp(data, CESettings.BankingUsage, CESettings.NoCurrency.format(data.UserName))
+                return
+
+            # deposit into checking.
+            Checking.deposit(data.UserName, data.GetParam(1))
+            SendResp(data, CESettings.BankingUsage,
+                     CESettings.CheckingAccountDeposit.format(data.UserName, data.GetParam(1),
+                                                              Parent.GetCurrencyName(),
+                                                              CESettings.BankName))
+            return
+
         if data.GetParam(0).lower() == CESettings.cmdCreateSavings.lower():
             # check to see if the user has banking permissions
             if not has_banking_permission(data):
@@ -215,6 +244,27 @@ def Execute(data):
                                                       CESettings.BankName))
             return
 
+        if data.GetParam(0).lower() == CESettings.cmdWithdrawSavings.lower() and data.GetParamCount() == 2:
+            # check to see if the user has banking permissions
+            if not has_banking_permission(data):
+                return
+
+            if not Savings.has_account(data.User()):
+                SendResp(data, CESettings.BankingUsage,
+                         CESettings.NoSavingsAccount.format(data.UserName, CESettings.BankName))
+                return
+
+            # make sure the user has enough points
+            if Parent.GetPoints(data.User) > data.GetParam(1):
+                SendResp(data, CESettings.BankingUsage, CESettings.NoCurrency.format(data.UserName))
+                return
+
+            SendResp(data, CESettings.BankingUsage,
+                     CESettings.SavingsDeposit.format(data.UserName, data.GetParam(1),
+                                                      Parent.GetCurrencyName(),
+                                                      CESettings.BankName))
+            return
+
         if data.GetParam(0).lower() == CESettings.cmdWireTransfer.lower()and data.GetParamCount() == 3:
             # check to see if the user has banking permissions
             if not has_banking_permission(data):
@@ -227,6 +277,8 @@ def Execute(data):
                 return
             # TODO: Create Wire Transfer Functions.
             return
+
+    return
 
 
 def Tick():

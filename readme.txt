@@ -40,21 +40,24 @@ modify something wrong.
 As I only use the Stream Labs Chat bot discord once in a while, usually when I go live or I have a question, The best place
 to reach me is my personal discord server.
 
-#iblamedoc Discord Server: https://discord.gg/76QM7Zh
+#TheCrzyDoctor's Discord Server:
+
+[Discord Server](https://discord.gg/76QM7Zh)
 
 You can reach me there pretty much all day as I work from home. If you do run into issues with the script please feel free to
-reach out to me and I'll update/fix what ever the issue was. If its just a feature request, I will most likely ignore these
-inquires as this was specifically built and for Goltrix2580 needs with the knowledge it was going to be released to the public, as we
-both could not find a gif script.
+reach out to me and I'll update/fix what ever the issue was. You are able to request features in the correct channel (crzy-economy)
 
+
+# Help ME!
 The following is a complaint about Stream Labs Chat Bot GetAPI Function and how I had to get Crzy Giphy working correctly.
 Help me get the developers of Stream Labs Chatbot add in a correct api read function for json! As of right now it returns UNICODE, yes a goddamn unicode string!
 Please login to their site and up vote that was turned down by AnkhHeart saying there is no need for it. WHICH IF LOOK AT HOW I HAD TO GET IT TO LOAD
 IT IS NEEDED!!! To much code needed to correct the issue. Wasteful!
 
-https://ideas.streamlabs.com/ideas/SL-I-3215
+[Request for JSON ReadAPI function instead of getting a god damn unicode string!](https://ideas.streamlabs.com/ideas/SL-I-3215)
 
-Donations are always welcome. But not required - https://paypal.me/thecrzydoctor
+
+[Donations are always welcome. But not required](https://paypal.me/thecrzydoctor)
 
 # Change Log
 ------------

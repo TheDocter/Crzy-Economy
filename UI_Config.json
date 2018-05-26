@@ -1,0 +1,208 @@
+{
+  "output_file": "settings.json",
+  "OnlyLive": {
+    "type": "checkbox",
+    "value": false,
+  	"label": "Only when live",
+    "tooltip": "Command is only active when stream is live",
+  	"group": "General"
+  },
+  "cmdBankInfo": {
+    "type": "textbox",
+    "value": "!bankinfo",
+    "label": "Command",
+    "tooltip": "Command to display information about your bank. LEAVE ALONE!",
+    "group": "Banking Commands"
+  },
+  "cmdCreateChecking": {
+    "type": "textbox",
+    "value": "!createchecking",
+    "label": "Command",
+    "tooltip": "Command to create a checking account. LEAVE ALONE!",
+    "group": "Banking Commands"
+  },
+  "cmdDepositChecking": {
+    "type": "textbox",
+    "value": "!depositchecking",
+    "label": "Command",
+    "tooltip": "Command to deposit money into a checking account. LEAVE ALONE!",
+    "group": "Banking Commands"
+  },
+  "cmdWithdrawChecking": {
+    "type": "textbox",
+    "value": "!withdrawchecking",
+    "label": "Command",
+    "tooltip": "Command to withdrawal money from a checking account. LEAVE ALONE!",
+    "group": "Banking Commands"
+  },
+  "cmdCreateSavings": {
+    "type": "textbox",
+    "value": "!createsavings",
+    "label": "Command",
+    "tooltip": "Command to create a savings account. LEAVE ALONE!",
+    "group": "Banking Commands"
+  },
+  "cmdDepositSavings": {
+    "type": "textbox",
+    "value": "!depositsavings",
+    "label": "Command",
+    "tooltip": "Command to deposit money into a savings account. LEAVE ALONE!",
+    "group": "Banking Commands"
+  },
+  "cmdWithdrawSavings": {
+    "type": "textbox",
+    "value": "!withdrawsavings",
+    "label": "Command",
+    "tooltip": "Command to withdrawal money from a savings account. LEAVE ALONE!",
+    "group": "Banking Commands"
+  },
+  "cmdWireTransfer": {
+    "type": "textbox",
+    "value": "!wiretransfer",
+    "label": "Wire Transfer Command",
+    "tooltip": "Command to allow users to give anther user currency. LEAVE ALONE!",
+    "group": "Banking Commands"
+  },
+  "SavingsInterestPercent": {
+    "type": "numberbox",
+    "label": "Saving Account Interest (Percentage 1 = 1%)",
+    "value": 1,
+    "tooltip": "Interest to add to a user's savings account. Must be a whole number!",
+    "group": "Banking Variables"
+  },
+  "SavingsInterestAdd": {
+    "type": "numberbox",
+    "label": "Interest Interval (seconds 2592000 = 1 Month)",
+    "value": 2592000,
+    "tooltip": "How often to add interest to someone's savings account.",
+    "group": "Banking Variables"
+  },
+  "WireTransferCost": {
+    "type": "numberbox",
+    "label": "Wire Transfer Cost",
+    "value": 10,
+    "tooltip": "How much to charge a user for transferring currency to another user.",
+    "group": "Banking Variables"
+  },
+  "CheckingAccountCreated": {
+    "type": "textbox",
+    "value": "{0}, you have created a new checking account at {1}.",
+  	"label": "Checking Account Created Responce",
+    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user \r\n {1} = Bank Name",
+  	"group": "Banking Responses"
+  },
+  "CheckingAccountAlreadyCreated": {
+    "type": "textbox",
+    "value": "{0}, you already created a checking account.",
+  	"label": "Checking Account Already Created Response",
+    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user",
+  	"group": "Banking Responses"
+  },
+  "NoCheckingAccount": {
+    "type": "textbox",
+    "value": "{0}, you do not have a checking account at {1}.",
+  	"label": "No Checking Account Response",
+    "tooltip": "The message that the bot will display when the command is on user cooldown.\r\n {0} = user \r\n {1} = Bank Name",
+  	"group": "Banking Responses"
+  },
+  "CheckingAccountDeposit": {
+    "type": "textbox",
+    "value": "{0}, you just deposited {1} {2} at {3}.",
+  	"label": "Checking Account Deposit Response",
+    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user \r\n {1} = Amount Deposited \r\n {2} = Currency Name \r\n {3} = Bank Name",
+  	"group": "Banking Responses"
+  },
+  "CheckingWithdrawal": {
+    "type": "textbox",
+    "value": "{0}, you just withdrew {1} from your checking account at {2}.",
+  	"label": "Checking Withdrawal Response",
+    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user \r\n {1} = Amount Withdrawn \r\n {2} = Bank Name",
+  	"group": "Banking Responses"
+  },
+  "SavingAccountCreated": {
+    "type": "textbox",
+    "value": "{0}, you have created a new savings account at {1}.",
+  	"label": "Savings Account Created Response",
+    "tooltip": "The message that the bot will display when the command is on user cooldown.\r\n {0} = user \r\n {1} =  Bank Name",
+  	"group": "Banking Responses"
+  },
+  "SavingsAccountAlreadyCreated": {
+    "type": "textbox",
+    "value": "{0}, you already created a savings account at {1}.",
+  	"label": "Savings Account Already Created Response",
+    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user \r\n {1} = Bank Name",
+  	"group": "Banking Responses"
+  },
+  "NoSavingsAccount": {
+    "type": "textbox",
+    "value": "{0}, you do not have a savings account at {1}.",
+  	"label": "No Savings Account Response",
+    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user \r\n {1} = Bank Name",
+  	"group": "Banking Responses"
+  },
+  "SavingsDeposit": {
+    "type": "textbox",
+    "value": "{0}, you just deposited {1} {2} at {2}.",
+  	"label": "Savings Deposit Response",
+    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user \r\n {1} = Amount Deposted \r\n {2} = Currency Name \r\n {3} = Bank Name",
+  	"group": "Banking Responses"
+  },
+  "SavingsWithdrawal": {
+    "type": "textbox",
+    "value": "{0}, you just withdrew {1} from your savings accounts at {2}.",
+  	"label": "Savings Withdraw Response",
+    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user \r\n {1} = Amount Withdrawn \r\n {2} = Bank Name",
+  	"group": "Banking Responses"
+  },
+  "WireTransferSent": {
+    "type": "textbox",
+    "value": "{0}, you just sent {1} {2}.",
+  	"label": "Wire Transer Sent Response",
+    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user \r\n {1} = user being sent money \r\n {2} = Amount sent to {1}",
+  	"group": "Banking Responses"
+  },
+  "WireTransferFailed": {
+    "type": "textbox",
+    "value": "{0}, there was a problem with sending {1} {2}.",
+  	"label": "Wire Transfer Fail Response",
+    "tooltip": "The message that the bot will display when wire transfer has failed. \r\n {0} = user \r\n {1} = user being sent money \r\n {2} = Bank Name",
+  	"group": "Banking Responses"
+  },
+  "InfoResponse": {
+    "type": "textbox",
+    "value": "Info coming in next version",
+  	"label": "Bank Info",
+    "tooltip": "Information about your bank.",
+  	"group": "Banking Responses"
+  },
+  "BankingUsage": {
+    "type": "dropdown",
+    "value": "Stream Chat",
+    "label": "Chat Options",
+    "tooltip": "Select where you want the command to be used from.",
+    "items": ["Stream Chat","Stream Whisper","Stream Both","Discord Chat","Discord Whisper","Discord Both","Chat Both","Whisper Both","All"],
+    "group": "Banking Permissions"
+  },
+  "BankingPermissions": {
+    "type": "dropdown",
+    "value": "Everyone",
+    "items": ["Everyone","Regular","Subscriber","GameWisp Subscriber","User_Specific","Min_Rank","Min_Points","Min_Hours","Moderator","Editor","Caster"],
+    "label": "Permission level",
+    "tooltip": "Set the permission level for the command",
+    "group": "Banking Permissions"
+  },
+    "BankingPermissionInfo": {
+    "type": "textbox",
+    "value": "",
+    "label": "Permission level info",
+    "tooltip": "Set the user, rank or tier for permission",
+    "group": "Banking Permissions"
+  },
+  "NoCurrency": {
+    "type": "textbox",
+    "value": "{0} -> You don't have any currency to use that command.",
+  	"label": "Wire Transfer Fail Response",
+    "tooltip": "Not enough currecny response",
+  	"group": "Responses"
+  }
+}
