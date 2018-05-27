@@ -247,7 +247,7 @@ def Execute(data):
             if not has_banking_permission(data):
                 return
 
-            if not Savings.has_account(data.User()):
+            if not Savings.has_account(data.UserName):
                 SendResp(data, CESettings.BankingUsage,
                          CESettings.NoSavingsAccount.format(data.UserName, CESettings.BankName))
                 return
@@ -270,7 +270,7 @@ def Execute(data):
             if not has_banking_permission(data):
                 return
 
-            if not Savings.has_account(data.User()):
+            if not Savings.has_account(data.UserName):
                 SendResp(data, CESettings.BankingUsage,
                          CESettings.NoSavingsAccount.format(data.UserName, CESettings.BankName))
                 return
