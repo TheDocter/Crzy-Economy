@@ -315,9 +315,10 @@ def Tick():
     # check interest add date. IF the date is equal to or less than INTEREST_ADD_DAY then add interest
     if datetime.datetime.now() <= INTEREST_ADD_DAY:
         # add interest
-        Savings.add_interest()
+        Savings.add_interest(CESettings.SavingsInterestPercent)
         Parent.SendStreamMessage("Interest of {0}% has been added to everyone's savings account at {1}".format(CESettings.SavingsInterestPercent, CESettings.BankName))
-    pass
+        return
+    return
 
 
 # ---------------------------------------

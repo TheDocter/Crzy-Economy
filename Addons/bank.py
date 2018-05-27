@@ -92,16 +92,19 @@ class Savings:
     def transfer(self, username):
         pass
 
-    def add_interest(self, username, interest):
-        with open(self.path + "/" + username + "-savings.txt", "r") as f:
-            account_amount = f.readline()
+    def add_interest(self, interest):
 
-        interest_added = int(account_amount) * interest
+        # lets loop through files and edit them
+        for savings_account in os.listdir(self.path):
+            with open(savings_account, "r") as f:
+                account_amount = f.readline()
 
-        new_balance = int(account_amount) + interest_added
+            interest_added = int(account_amount) * interest
 
-        with open(self.path + "/" + username + "-savings.txt", "w") as f:
-            f.write(str(new_balance))
+            new_balance = int(account_amount) + interest_added
+
+            with open(savings_account, "w") as f:
+                f.write(str(new_balance))
 
     def close_account(self, username):
         pass
