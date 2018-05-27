@@ -145,12 +145,12 @@ def Init():
         # det date x days from now.
         date_now = datetime.datetime.now()
         interest_add_day = date_now + datetime.timedelta(days=int(CESettings.SavingsInterestAdd))
-        with open(BASE_DIR + "/interest_add_date.txt", "w") as f:
+        with open(SAVINGS_DIR + "/interest_add_date.txt", "w") as f:
             f.write(str(interest_add_day))
         INTEREST_ADD_DAY = interest_add_day
     else:
         # get the date and store it into vairable
-        with open(BASE_DIR + "/interest_add_date.txt", "r") as f:
+        with open(SAVINGS_DIR + "/interest_add_date.txt", "r") as f:
             day = f.readline()
         datetime_object = datetime.datetime.strptime(day, '%b %d %Y %I:%M%p')
         INTEREST_ADD_DAY = datetime_object
@@ -316,6 +316,7 @@ def Tick():
     if datetime.datetime.now() > INTEREST_ADD_DAY:
         # add interest
         Savings.add_interest(CESettings.SavingsInterestPercent)
+        update_interest_time()
         Parent.SendStreamMessage("Interest of {0}% has been added to everyone's savings account at {1}".format(CESettings.SavingsInterestPercent, CESettings.BankName))
         return
     return
@@ -446,3 +447,12 @@ def add_cooldown(data):
     else:
         Parent.AddUserCooldown(ScriptName, CESettings.Command, data.User, CESettings.UserCoolDown)
         Parent.AddCooldown(ScriptName, CESettings.Command, CESettings.CoolDown)
+
+
+def update_interest_time():
+    global INTEREST_ADD_DAY
+    date_now = datetime.datetime.now()
+    interest_add_day = date_now + datetime.timedelta(days=int(CESettings.SavingsInterestAdd))
+    with open(SAVINGS_DIR + "/interest_add_date.txt", "w") as f:
+        f.write(str(interest_add_day))
+    INTEREST_ADD_DAY = interest_add_day

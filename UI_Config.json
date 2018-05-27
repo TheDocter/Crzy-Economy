@@ -49,6 +49,13 @@
     "tooltip": "Command to deposit money into a savings account. LEAVE ALONE!",
     "group": "Banking Commands"
   },
+  "BankName": {
+    "type": "textbox",
+    "value": "TheCrzyDoctor\'s Bank",
+    "label": "Bank Name",
+    "tooltip": "Command to withdrawal money from a savings account. LEAVE ALONE!",
+    "group": "Banking Variables"
+  },
   "cmdWithdrawSavings": {
     "type": "textbox",
     "value": "!withdrawsavings",
