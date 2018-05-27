@@ -5,7 +5,7 @@ Date: 05/10/2017
 Version: 1
 """
 import os
-import datetime
+
 
 class Checking:
     def __init__(self, path):

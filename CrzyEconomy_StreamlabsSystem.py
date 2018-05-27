@@ -388,7 +388,7 @@ def has_permission(data):
 def has_banking_permission(data):
     """ CHecks to see if the user hs the correct permission.  Based on Castorr91's Gamble"""
     if not Parent.HasPermission(data.User, CESettings.BankingPermissions, CESettings.PermissionInfo):
-        message = CESettings.PermissionResp.format(data.UserName, CESettings.Permission, CESettings.PermissionInfo)
+        message = CESettings.PermissionResp.format(data.UserName, CESettings.BankingPermission, CESettings.BankingPermissionInfo)
         SendResp(data, CESettings.Usage, message)
         return False
     return True
