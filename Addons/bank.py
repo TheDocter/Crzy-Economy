@@ -93,7 +93,7 @@ class Savings:
         pass
 
     def add_interest(self, interest):
-
+        """ Adds interest to savings account. """
         # lets loop through files and edit them
         for savings_account in os.listdir(self.path):
             with open(savings_account, "r") as f:
