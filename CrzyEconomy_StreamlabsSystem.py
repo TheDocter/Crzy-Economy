@@ -232,7 +232,7 @@ def Execute(data):
             if not has_banking_permission(data):
                 return
 
-            if Savings.has_account(data.User):
+            if Savings.has_account(data.UserName):
                 SendResp(data, CESettings.BankingUsage,
                          CESettings.SavingsAccountAlreadyCreated.format(data.UserName, CESettings.BankName))
                 return
