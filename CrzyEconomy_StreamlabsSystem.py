@@ -258,7 +258,7 @@ def Execute(data):
                 return
             # deposit into savings
             Savings.deposit(data.UserName, data.GetParam(1))
-            Parent.RemovePoints(data.User, data.GetParam(1))
+            Parent.RemovePoints(data.User, int(data.GetParam(1)))
             SendResp(data, CESettings.BankingUsage,
                      CESettings.SavingsDeposit.format(data.UserName, data.GetParam(1),
                                                       Parent.GetCurrencyName(),
