@@ -305,6 +305,7 @@ def Execute(data):
 
             # add currency to person it was sent to
             Parent.AddPoints(data.GetParam(1), int(data.GetParam(2)))
+            SendResp(data, CESettings.BankingUsage, CESettings.WireTransferSent.format(data.User, data.GetParam(1), data.GetParam(2)))
             return
 
     return
