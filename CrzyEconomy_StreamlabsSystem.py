@@ -195,7 +195,7 @@ def Execute(data):
 
             # deposit into checking.
             Checking.deposit(data.UserName, data.GetParam(1))
-            Parent.RemovePoints(data.User, data.GetParam(1))
+            Parent.RemovePoints(data.User, int(data.GetParam(1)))
             SendResp(data, CESettings.BankingUsage,
                      CESettings.CheckingAccountDeposit.format(data.UserName, data.GetParam(1),
                                                               Parent.GetCurrencyName(),
@@ -220,7 +220,7 @@ def Execute(data):
 
             # withdraw from checking.
             Checking.withdraw(data.UserName, data.GetParam(1))
-            Parent.AddPoints(data.User, data.GetParam(1))
+            Parent.AddPoints(data.User, int(data.GetParam(1)))
             SendResp(data, CESettings.BankingUsage,
                      CESettings.CheckingWithdrawal.format(data.UserName, data.GetParam(1),
                                                               Parent.GetCurrencyName(),
