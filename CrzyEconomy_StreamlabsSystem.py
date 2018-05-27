@@ -237,7 +237,7 @@ def Execute(data):
                          CESettings.SavingsAccountAlreadyCreated.format(data.UserName, CESettings.BankName))
                 return
 
-            Savings.create_account(data.User())
+            Savings.create_account(data.UserName)
             SendResp(data, CESettings.BankingUsage, CESettings.SavingAccountCreated.format(data.UserName, CESettings.BankName))
 
             return
