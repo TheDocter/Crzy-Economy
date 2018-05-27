@@ -30,13 +30,13 @@ ScriptName = "Crzy Economy"
 Website = "https://www.twitch.tv/thecrzydoc"
 Description = "Simulates a full blown economy for the chat bot."
 Creator = "TheCrzyDoctor"
-Version = "0.0.1"
+Version = "1.0.0"
 
 settingsFile = os.path.join(os.path.dirname(__file__), "settings.json")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CHECKING_DIR = BASE_DIR + '/Banking/checkingaccounts'
 SAVINGS_DIR = BASE_DIR + '/Banking/savingaccounts'
-WIRE_TRANSFER_DIR = BASE_DIR + '/Banking/wiretransfer'
+# WIRE_TRANSFER_DIR = BASE_DIR + '/Banking/wiretransfer'
 INTEREST_ADD_DAY = None
 
 
@@ -120,13 +120,14 @@ def ReloadSettings(jsonData):
 # ---------------------------------------
 def Init():
     """ Intialize Data (only called on load) """
-    global CESettings, Checking, Savings, WireTransfer, INTEREST_ADD_DAY
+    global CESettings, Checking, Savings, INTEREST_ADD_DAY
 
     # Create global vars to use banking
     CESettings = Settings(settingsFile)
     Checking = bank.Checking(CHECKING_DIR)
     Savings = bank.Savings(SAVINGS_DIR)
-    WireTransfer = bank.WireTransfer(WIRE_TRANSFER_DIR)
+    # WireTransfer disabled and handled in Execute function for now.
+    #WireTransfer = bank.WireTransfer(WIRE_TRANSFER_DIR)
 
     # Check to see if the folders are created.
     if not os.path.exists(CHECKING_DIR):
@@ -135,8 +136,9 @@ def Init():
     if not os.path.exists(SAVINGS_DIR):
         os.mkdir(SAVINGS_DIR)
 
-    if not os.path.exists(WIRE_TRANSFER_DIR):
-        os.mkdir(WIRE_TRANSFER_DIR)
+    # Wire Transfer is disabled in bank.py and is jsut handeled in the execute function for now.
+    #if not os.path.exists(WIRE_TRANSFER_DIR):
+    #    os.mkdir(WIRE_TRANSFER_DIR)
 
     # check if file exists and if not create the file that holds when to update the interest...
     if not os.path.isfile(BASE_DIR + "interest_add_date.txt"):
@@ -193,6 +195,7 @@ def Execute(data):
 
             # deposit into checking.
             Checking.deposit(data.UserName, data.GetParam(1))
+            Parent.RemovePoints(data.User, data.GetParam(1))
             SendResp(data, CESettings.BankingUsage,
                      CESettings.CheckingAccountDeposit.format(data.UserName, data.GetParam(1),
                                                               Parent.GetCurrencyName(),
@@ -217,6 +220,7 @@ def Execute(data):
 
             # withdraw from checking.
             Checking.withdraw(data.UserName, data.GetParam(1))
+            Parent.AddPoints(data.User, data.GetParam(1))
             SendResp(data, CESettings.BankingUsage,
                      CESettings.CheckingWithdrawal.format(data.UserName, data.GetParam(1),
                                                               Parent.GetCurrencyName(),
@@ -252,7 +256,9 @@ def Execute(data):
             if Parent.GetPoints(data.User) > data.GetParam(1):
                 SendResp(data, CESettings.BankingUsage, CESettings.NoCurrency.format(data.UserName))
                 return
-
+            # deposit into savings
+            Savings.deposit(data.UserName, data.GetParam(1))
+            Parent.RemovePoints(data.User, data.GetParam(1))
             SendResp(data, CESettings.BankingUsage,
                      CESettings.SavingsDeposit.format(data.UserName, data.GetParam(1),
                                                       Parent.GetCurrencyName(),
@@ -276,6 +282,7 @@ def Execute(data):
 
             # withdraw from savings.
             Checking.withdraw(data.UserName, data.GetParam(1))
+            Parent.AddPoints(data.User, data.GetParam(1))
             SendResp(data, CESettings.BankingUsage,
                      CESettings.SavingsWithdrawal.format(data.UserName, data.GetParam(1),
                                                       Parent.GetCurrencyName(),
