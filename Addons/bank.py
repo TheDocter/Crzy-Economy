@@ -122,8 +122,3 @@ class Savings:
             return True
 
         return False
-
-
-class WireTransfer:
-    def __init__(self, path):
-        self.path = path

@@ -37,6 +37,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CHECKING_DIR = BASE_DIR + '/Banking/checkingaccounts'
 SAVINGS_DIR = BASE_DIR + '/Banking/savingaccounts'
 WIRE_TRANSFER_DIR = BASE_DIR + '/Banking/wiretransfer'
+INTEREST_ADD_DAY = None
 
 
 class Settings:
@@ -60,19 +61,19 @@ class Settings:
             self.cmdWireTransfer = '!wiretransfer'
             # Banking Variables
             self.SavingsInterestPercent = 1
-            self.SavingsInterestAdd = 2592000
+            self.SavingsInterestAdd = 30
             self.WireTransferCost = 25
             # Banking Responses
             self.CheckingAccountCreated = '{0}, you have created a new checking account at {1}.'
             self.CheckingAccountAlreadyCreated = '{0}, you already created a checking account.'
             self.NoCheckingAccount = '{0}, you do not have a checking account at {1}.'
             self.CheckingAccountDeposit = '{0}, you just deposited {1} {2} at {3}.'
-            self.CheckingWithdrawal = '{0}, you just withdrew {1} from your checking account at {2}.'
+            self.CheckingWithdrawal = '{0}, you just withdrew {1} {2} from your checking account at {3}.'
             self.SavingAccountCreated = '{0}, you have created a new savings account at {1}.'
             self.SavingsAccountAlreadyCreated = '{0}, you already created a savings account.'
             self.NoSavingsAccount = '{0}, you do not have a savings account at {1}.'
             self.SavingsDeposit = '{0}, you just deposited {1} {2} at {2}.'
-            self.SavingsWithdrawal = '{0}, you just withdrew {1} from your savings accounts at {2}.'
+            self.SavingsWithdrawal = '{0}, you just withdrew {1} {2} from your savings accounts at {3}.'
             self.WireTransferSent = '{0}, you just sent {1} {2}.'
             self.WireTransferFailed = '{0}, there was a problem with sending {1} {2}.'
             # Banking Permissions
@@ -119,7 +120,7 @@ def ReloadSettings(jsonData):
 # ---------------------------------------
 def Init():
     """ Intialize Data (only called on load) """
-    global CESettings, Checking, Savings, WireTransfer
+    global CESettings, Checking, Savings, WireTransfer, INTEREST_ADD_DAY
 
     # Create global vars to use banking
     CESettings = Settings(settingsFile)
@@ -137,6 +138,20 @@ def Init():
     if not os.path.exists(WIRE_TRANSFER_DIR):
         os.mkdir(WIRE_TRANSFER_DIR)
 
+    # check if file exists and if not create the file that holds when to update the interest...
+    if not os.path.isfile(BASE_DIR + "interest_add_date.txt"):
+        # det date x days from now.
+        date_now = datetime.datetime.now()
+        interest_add_day = date_now + datetime.timedelta(days=int(CESettings.SavingsInterestAdd))
+        with open(BASE_DIR + "/interest_add_date.txt", "w") as f:
+            f.write(str(interest_add_day))
+        INTEREST_ADD_DAY = interest_add_day
+    else:
+        # get the date and store it into vairable
+        with open(BASE_DIR + "/interest_add_date.txt", "r") as f:
+            day = f.readline()
+        datetime_object = datetime.datetime.strptime(day, '%b %d %Y %I:%M%p')
+        INTEREST_ADD_DAY = datetime_object
     return
 
 
@@ -196,14 +211,14 @@ def Execute(data):
                 return
 
             # make sure the user has enough points
-            if Parent.GetPoints(data.User) > data.GetParam(1):
+            if not Checking.has_money_in_account(data.User, data.GetParam(1)):
                 SendResp(data, CESettings.BankingUsage, CESettings.NoCurrency.format(data.UserName))
                 return
 
-            # deposit into checking.
-            Checking.deposit(data.UserName, data.GetParam(1))
+            # withdraw from checking.
+            Checking.withdraw(data.UserName, data.GetParam(1))
             SendResp(data, CESettings.BankingUsage,
-                     CESettings.CheckingAccountDeposit.format(data.UserName, data.GetParam(1),
+                     CESettings.CheckingWithdrawal.format(data.UserName, data.GetParam(1),
                                                               Parent.GetCurrencyName(),
                                                               CESettings.BankName))
             return
@@ -255,12 +270,14 @@ def Execute(data):
                 return
 
             # make sure the user has enough points
-            if Parent.GetPoints(data.User) > data.GetParam(1):
+            if not Savings.has_money_in_account(data.User, data.GetParam(1)):
                 SendResp(data, CESettings.BankingUsage, CESettings.NoCurrency.format(data.UserName))
                 return
 
+            # withdraw from savings.
+            Checking.withdraw(data.UserName, data.GetParam(1))
             SendResp(data, CESettings.BankingUsage,
-                     CESettings.SavingsDeposit.format(data.UserName, data.GetParam(1),
+                     CESettings.SavingsWithdrawal.format(data.UserName, data.GetParam(1),
                                                       Parent.GetCurrencyName(),
                                                       CESettings.BankName))
             return
@@ -271,11 +288,16 @@ def Execute(data):
                 return
 
             # make sure the user has enough points
-            points = int(data.GetParam(1)) + CESettings.WireTransferCost
+            points = int(data.GetParam(2)) + CESettings.WireTransferCost
             if Parent.GetPoints(data.User) < points:
                 SendResp(data, CESettings.BankingUsage, CESettings.NoCurrency.format(data.UserName))
                 return
-            # TODO: Create Wire Transfer Functions.
+
+            # remove currency from person sending transfer
+            Parent.RemovePoints(data.User, points)
+
+            # add currency to person it was sent to
+            Parent.AddPoints(data.GetParam(1), int(data.GetParam(2)))
             return
 
     return
@@ -283,6 +305,11 @@ def Execute(data):
 
 def Tick():
     """Required tick function"""
+    # check interest add date. IF the date is equal to or less than INTEREST_ADD_DAY then add interest
+    if datetime.datetime.now() <= INTEREST_ADD_DAY:
+        # add interest
+        Savings.add_interest()
+        Parent.SendStreamMessage("Interest of {0}% has been added to everyone's savings account at {1}".format(CESettings.SavingsInterestPercent, CESettings.BankName))
     pass
 
 

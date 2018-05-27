@@ -72,8 +72,8 @@
   },
   "SavingsInterestAdd": {
     "type": "numberbox",
-    "label": "Interest Interval (seconds 2592000 = 1 Month)",
-    "value": 2592000,
+    "label": "Interest Interval (Days)",
+    "value": 30,
     "tooltip": "How often to add interest to someone's savings account.",
     "group": "Banking Variables"
   },
@@ -88,77 +88,77 @@
     "type": "textbox",
     "value": "{0}, you have created a new checking account at {1}.",
   	"label": "Checking Account Created Responce",
-    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user \r\n {1} = Bank Name",
+    "tooltip": "Tells the user they created a checking account. \r\n {0} = user \r\n {1} = Bank Name",
   	"group": "Banking Responses"
   },
   "CheckingAccountAlreadyCreated": {
     "type": "textbox",
     "value": "{0}, you already created a checking account.",
   	"label": "Checking Account Already Created Response",
-    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user",
+    "tooltip": "Tells the user they already have a checking account. \r\n {0} = user",
   	"group": "Banking Responses"
   },
   "NoCheckingAccount": {
     "type": "textbox",
     "value": "{0}, you do not have a checking account at {1}.",
   	"label": "No Checking Account Response",
-    "tooltip": "The message that the bot will display when the command is on user cooldown.\r\n {0} = user \r\n {1} = Bank Name",
+    "tooltip": "Tells the user they don't have a checking account.\r\n {0} = user \r\n {1} = Bank Name",
   	"group": "Banking Responses"
   },
   "CheckingAccountDeposit": {
     "type": "textbox",
     "value": "{0}, you just deposited {1} {2} at {3}.",
   	"label": "Checking Account Deposit Response",
-    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user \r\n {1} = Amount Deposited \r\n {2} = Currency Name \r\n {3} = Bank Name",
+    "tooltip": "Tells the user that they deposited into their checking account. \r\n {0} = user \r\n {1} = Amount Deposited \r\n {2} = Currency Name \r\n {3} = Bank Name",
   	"group": "Banking Responses"
   },
   "CheckingWithdrawal": {
     "type": "textbox",
-    "value": "{0}, you just withdrew {1} from your checking account at {2}.",
+    "value": "{0}, you just withdrew {1} {2} from your checking account at {3}.",
   	"label": "Checking Withdrawal Response",
-    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user \r\n {1} = Amount Withdrawn \r\n {2} = Bank Name",
+    "tooltip": "Tells a user that they withdrew from their checking account. \r\n {0} = user \r\n {1} = Amount Withdrawn \r\n {2} = Currency Name \r\n {3} = Bank Name",
   	"group": "Banking Responses"
   },
   "SavingAccountCreated": {
     "type": "textbox",
     "value": "{0}, you have created a new savings account at {1}.",
   	"label": "Savings Account Created Response",
-    "tooltip": "The message that the bot will display when the command is on user cooldown.\r\n {0} = user \r\n {1} =  Bank Name",
+    "tooltip": "Tells the user their savings account was created.\r\n {0} = user \r\n {1} =  Bank Name",
   	"group": "Banking Responses"
   },
   "SavingsAccountAlreadyCreated": {
     "type": "textbox",
     "value": "{0}, you already created a savings account at {1}.",
   	"label": "Savings Account Already Created Response",
-    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user \r\n {1} = Bank Name",
+    "tooltip": "Tells a user they already have a savings account. \r\n {0} = user \r\n {1} = Bank Name",
   	"group": "Banking Responses"
   },
   "NoSavingsAccount": {
     "type": "textbox",
     "value": "{0}, you do not have a savings account at {1}.",
   	"label": "No Savings Account Response",
-    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user \r\n {1} = Bank Name",
+    "tooltip": "Tells a user they do not have a savings account. \r\n {0} = user \r\n {1} = Bank Name",
   	"group": "Banking Responses"
   },
   "SavingsDeposit": {
     "type": "textbox",
     "value": "{0}, you just deposited {1} {2} at {2}.",
   	"label": "Savings Deposit Response",
-    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user \r\n {1} = Amount Deposted \r\n {2} = Currency Name \r\n {3} = Bank Name",
+    "tooltip": "Shows user that they depoisted into the savings account.. \r\n {0} = user \r\n {1} = Amount Deposted \r\n {2} = Currency Name \r\n {3} = Bank Name",
   	"group": "Banking Responses"
   },
   "SavingsWithdrawal": {
     "type": "textbox",
-    "value": "{0}, you just withdrew {1} from your savings accounts at {2}.",
+    "value": "{0}, you just withdrew {1} {2} from your savings accounts at {3}.",
   	"label": "Savings Withdraw Response",
-    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user \r\n {1} = Amount Withdrawn \r\n {2} = Bank Name",
+    "tooltip": "Displays message about user withdrawal from savings account. \r\n {0} = user \r\n {1} = Amount Withdrawn \r\n {2} = Currency Name \r\n {3} = Bank Name",
   	"group": "Banking Responses"
   },
   "WireTransferSent": {
     "type": "textbox",
     "value": "{0}, you just sent {1} {2}.",
   	"label": "Wire Transer Sent Response",
-    "tooltip": "The message that the bot will display when the command is on user cooldown. \r\n {0} = user \r\n {1} = user being sent money \r\n {2} = Amount sent to {1}",
+    "tooltip": "Tells a user they just got money via a wire transfer. \r\n {0} = user \r\n {1} = user being sent money \r\n {2} = Amount sent to {1}",
   	"group": "Banking Responses"
   },
   "WireTransferFailed": {
