@@ -37,7 +37,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CHECKING_DIR = BASE_DIR + '/Banking/checkingaccounts'
 SAVINGS_DIR = BASE_DIR + '/Banking/savingaccounts'
 # WIRE_TRANSFER_DIR = BASE_DIR + '/Banking/wiretransfer'
-INTEREST_ADD_DAY = None
+INTEREST_ADD_DAY = datetime.datetime.now()
 
 
 class Settings:
@@ -313,7 +313,7 @@ def Execute(data):
 def Tick():
     """Required tick function"""
     # check interest add date. IF the date is equal to or less than INTEREST_ADD_DAY then add interest
-    if datetime.datetime.now() <= INTEREST_ADD_DAY:
+    if datetime.datetime.now() < INTEREST_ADD_DAY:
         # add interest
         Savings.add_interest(CESettings.SavingsInterestPercent)
         Parent.SendStreamMessage("Interest of {0}% has been added to everyone's savings account at {1}".format(CESettings.SavingsInterestPercent, CESettings.BankName))
