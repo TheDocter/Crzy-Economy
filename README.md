@@ -1,3 +1,5 @@
+THIS STEAMLABSCHATBOT PLUGIN IS NO LONGER BEING WORKED ON! NO SUPPORT WILL BE GIVEN TO IT.
+
 # About
 ------
 Crzy Economy is a full blown economy for your chat. As of version 1.0.0 It only contains banking, checking and savings, and
